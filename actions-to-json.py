@@ -1,5 +1,6 @@
 import bpy
 import math
+import sys
 # Get all of the keyframes for the current action
 def getActionKeyframes(action):
     keyframes = []
@@ -89,8 +90,12 @@ for actionInfo in actionsList:
 # Get rid of the last trailing comma for the action names
 jsonActionData = jsonActionData.rstrip('\r\n').rstrip(',')
 jsonActionData += '\n}'
-print(jsonActionData)
-# Wrote out data to a file
-file = '/var/tmp/foo.json'
+# print(jsonActionData)
+# Write out data to a file
+# file = '/var/tmp/foo.json'
+argv = sys.argv
+# Get all args after `--`
+argv = argv[argv.index('--') + 1:]
+file = argv[0]
 with open(file, 'w') as outputFile:
     outputFile.write(jsonActionData)
