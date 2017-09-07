@@ -3,6 +3,8 @@ blender-actions-to-json [![npm version](https://badge.fury.io/js/blender-actions
 
 > Give a Blender `.blend` file, write the joint data for all actions to a JSON file
 
+![Example Gif](example-gif.gif)
+
 ## Initial Background / Motivation
 
 #### Before
