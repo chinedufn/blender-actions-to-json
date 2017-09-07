@@ -5,6 +5,22 @@ blender-actions-to-json [![npm version](https://badge.fury.io/js/blender-actions
 
 ## Initial Background / Motivation
 
+#### Before
+
+I export my Blender models to COLLADA using the native Blender COLLADA exporter before parsing these COLLADA files for my model's data.
+
+Unfortunately this only includes the raw keyframes and no metadata about which keyframes belong to which action,
+so I end up needing to manually keep track of which keyframe each action starts on.
+
+#### After
+
+The purpose of this module is to remove that work for me. Now if I want to get the keyframes and joints for the `attack` animation, I can just
+reference the JSON action file that this module generates under the key `attack`.
+If the number of keyframes for the `attack` action changes, they'll still all be under the `attack` action key in the JSON data so
+I will still have access to them without needing to manually specify the new range of keyframes. Just iterate over the `attack` key
+
+This is part of an effort to automate more of my asset pipeline.
+
 ## Note
 
 **This script currenly requires that your `bpy.context.active_object` is your armature.**
