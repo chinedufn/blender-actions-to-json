@@ -4,7 +4,7 @@
   "description": "Write the joint data for all `.blend` file actions to a JSON file",
   "main": "test.js",
   "scripts": {
-    "test": "standard && node test.js"
+    "test": "standard && tape test/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -31,9 +31,7 @@
     "url": "https://github.com/chinedufn/blender-actions-to-json/issues"
   },
   "homepage": "https://github.com/chinedufn/blender-actions-to-json#readme",
-  "dependencies": {
-    "minimist": "^1.2.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "tape": "^4.7.0"
   }
