@@ -49,11 +49,22 @@ def stringifyMatrix (matrix):
 # Get the armature that is currently active. We will be parsing it's actions
 # TODO: Error message if the active object is not the armature
 activeArmature = bpy.context.scene.objects.active
+# If the active object isn't an armature, we use the first armature that we find
+if activeArmature.type != 'ARMATURE':
+    for obj in bpy.context.scene.objects:
+        if obj.type == 'ARMATURE':
+            activeArmature = obj
+            bpy.context.scene.objects.active = activeArmature
+            break
+
 # Get all of the actions
 # TODO: If we later support handling multiple armatures we'll need to only use the
 # actions that apply to the current armature
 actionsList = list(bpy.data.actions)
 bpy.ops.object.mode_set(mode = 'POSE')
+# Select all of the armature's bones so that we can iterate over them later
+for poseBone in activeArmature.pose.bones:
+    poseBone.bone.select = True
 # Start building our JSON
 # The format is
 # {
