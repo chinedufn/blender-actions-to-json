@@ -23,31 +23,6 @@ I will still have access to them without needing to manually specify the new ran
 
 This is part of an effort to automate more of my asset pipeline.
 
-## Note
-
-`blender-actions-to-json` currently only exports actions for one armature.
-
-**This script currenly requires that your `bpy.context.active_object` is your armature.**
-
-`blender-actions-to-json` will use the first armature that it finds if the `bpy.context.active_object` is not an armature,
-so if your file only has one armature you're good to go.
-
-Otherwise you will need either need to select your desired armature before running this script.
-
-You can do this by either:
-
-1. Running an armature selection script before this script
-2. OR manually right click it while in object mode before running this script.
-
-If you're looking to use this script as part of a fully automated pipeline, `#2` is not an option and you will need to do #1.
-
-You can chain blender scripts, so you can run `blender my-model.blend --background --python my-script-that-selects-armature --python blender-actions-to-json.py -- ./outputfile.json`
-
-Again, all of this only applies if your Blender file has more than one armature. When I eventually work with files with multiple armatures I'll have a better
-idea of how to address this.
-
-If any of this is confusing please open an issue and I'll try to give a better explanation based on your question(s)!
-
 ## To Install
 
 ```sh
@@ -93,6 +68,31 @@ For example, COLLADA export files will have your joints in the same order that t
 can just match them up.
 
 If any of this is confusing please open an issue!
+
+## Note
+
+`blender-actions-to-json` currently only exports actions for one armature.
+
+**This script currenly requires that your `bpy.context.active_object` is your armature.**
+
+`blender-actions-to-json` will use the first armature that it finds if the `bpy.context.active_object` is not an armature,
+so if your file only has one armature you're good to go.
+
+Otherwise you will need either need to select your desired armature before running this script.
+
+You can do this by either:
+
+1. Running an armature selection script before this script
+2. OR manually right click it while in object mode before running this script.
+
+If you're looking to use this script as part of a fully automated pipeline, `#2` is not an option and you will need to do #1.
+
+You can chain blender scripts, so you can run `blender my-model.blend --background --python my-script-that-selects-armature --python blender-actions-to-json.py -- ./outputfile.json`
+
+Again, all of this only applies if your Blender file has more than one armature. When I eventually work with files with multiple armatures I'll have a better
+idea of how to address this.
+
+If any of this is confusing please open an issue and I'll try to give a better explanation based on your question(s)!
 
 ## To test
 
