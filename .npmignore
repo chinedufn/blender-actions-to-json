@@ -1,0 +1,2 @@
+# Ignore all of our test Blender files when npm installing
+*.blend
