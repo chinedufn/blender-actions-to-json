@@ -1,7 +1,7 @@
 blender-actions-to-json [![npm version](https://badge.fury.io/js/blender-actions-to-json.svg)](http://badge.fury.io/js/blender-actions-to-json) [![Build Status](https://travis-ci.org/chinedufn/blender-actions-to-json.svg?branch=master)](https://travis-ci.org/chinedufn/blender-actions-to-json)
 ===============
 
-> Give a Blender `.blend` file, write the joint data for all actions to a JSON file
+> Given a Blender `.blend` file, write the joint data for all actions to a JSON file
 
 ![Example Gif](example-gif.gif)
 
@@ -25,45 +25,38 @@ This is part of an effort to automate more of my asset pipeline.
 
 ## Note
 
+`blender-actions-to-json` currently only exports actions for one armature.
+
 **This script currenly requires that your `bpy.context.active_object` is your armature.**
 
-This means that you need either:
+`blender-actions-to-json` will use the first armature that it finds if the `bpy.context.active_object` is not an armature,
+so if your file only has one armature you're good to go.
 
-1. Set `bpy.context.active_object = myArmatureObject` in your Python console (manually or via a script)
-2. OR manually right click on the armature while in object mode
+Otherwise you will need either need to select your desired armature before running this script.
 
-If you're looking to use this script as part of an automated pipeline, `#2` is not an option and you will need to do #1.
+You can do this by either:
+
+1. Running an armature selection script before this script
+2. OR manually right click it while in object mode before running this script.
+
+If you're looking to use this script as part of a fully automated pipeline, `#2` is not an option and you will need to do #1.
 
 You can chain blender scripts, so you can run `blender my-model.blend --background --python my-script-that-selects-armature --python blender-actions-to-json.py -- ./outputfile.json`
+
+Again, all of this only applies if your Blender file has more than one armature. When I eventually work with files with multiple armatures I'll have a better
+idea of how to address this.
 
 If any of this is confusing please open an issue and I'll try to give a better explanation based on your question(s)!
 
 ## To Install
 
-There is currently no add-on for this script and you must run it via Blender Python console, or the Blender CLI.
-
-So you'll have to download the script:
-
 ```sh
-curl -OL https://github.com/chinedufn/blender-iks-to-fks/master/blender-actions-to-json.py > blender-actions-to-json.py
-```
-
-## To test
-
-In order to run the tests you'll need to have `blender` in your $PATH so that we can spawn a headless blender process from Node.js.
-
-If Blender isn't already in your $PATH, on mac you can try `export PATH="$PATH:/Applications/blender.app/Contents/MacOS"` in your terminal
-
-```sh
-npm run test
+npm install -g blender-actions-to-json
 ```
 
 ## Usage
 
-If your Blender file has your `armature` as the `bpy.context.active_object` (aka it was the last object you right clicked in Object mode) everything will work just fine.
-If not, see the `Note` section above for how to handle this.
-
-`blender my-model.blend --background --python blender-iks-to-fks.py -- ./my-model-actions.json`
+`blender my-model.blend --background --python `actions2json` -- ./path/to/my-model-actions.json`
 
 The structure will look something like this:
 
@@ -98,6 +91,19 @@ For example, COLLADA export files will have your joints in the same order that t
 can just match them up.
 
 If any of this is confusing please open an issue!
+
+## To test
+
+In order to run the tests you'll need to have `blender` in your $PATH so that we can spawn a headless blender process from Node.js.
+
+If Blender isn't already in your $PATH, on mac you can try `export PATH="$PATH:/Applications/blender.app/Contents/MacOS"` in your terminal
+
+```sh
+git clone https://github.com/chinedufn/blender-actions-to-json
+cd blender-actions-to-json
+npm install
+npm run test
+```
 
 ## TODO:
 
