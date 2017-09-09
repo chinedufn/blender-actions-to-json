@@ -32,7 +32,7 @@ npm install -g blender-actions-to-json
 ## Usage
 
 ```
-blender /path/to/my-model.blend --background --python `actions2json` -- /path/to/my-model-actions.json
+blender /path/to/my-model.blend --background --python `actions2json` -- /path/to/output.json
 ```
 
 The outputted file will look something like this:
