@@ -4,7 +4,7 @@
   "description": "Write the joint data for all `.blend` file actions to a JSON file",
   "main": "index.js",
   "bin": {
-    "actions2json": "./cmd.js"
+    "actions2json": "./bin/actions2json.js"
   },
   "scripts": {
     "test": "standard && tape test/**/*.js"
@@ -36,6 +36,7 @@
   "homepage": "https://github.com/chinedufn/blender-actions-to-json#readme",
   "dependencies": {},
   "devDependencies": {
+    "minimist": "^1.2.0",
     "standard": "^10.0.3",
     "tape": "^4.7.0"
   }

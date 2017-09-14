@@ -3,7 +3,7 @@ var fs = require('fs')
 var path = require('path')
 
 var test = require('tape')
-var pythonActionToJSONScript = path.resolve(__dirname, '../actions-to-json.py')
+var runActionScript = path.resolve(__dirname, '../run-addon.py')
 
 // Our test file already have the armature selected as the active object
 // The script currently requires that the active object be the armature that
@@ -33,7 +33,7 @@ test('Writing the actions of a cube with one bone to a JSON file', function (t) 
   // Spawn an instance of Blender, write the test output file, and ensure that it matches our
   // expected output
   cp.exec(
-    `blender ${testBlendFile} --background --python ${pythonActionToJSONScript} -- ${outFilePath}`,
+    `blender ${testBlendFile} --background --python ${runActionScript} -- ${outFilePath}`,
     function (err, stdout, stderr) {
       if (err) { throw err }
 
@@ -62,7 +62,7 @@ test('Uses all of the pose bones, not just the ones that were selected', functio
   // Spawn an instance of Blender, write the test output file, and ensure that it matches our
   // expected output
   cp.exec(
-    `blender ${testBlendFile} --background --python ${pythonActionToJSONScript} -- ${outFilePath}`,
+    `blender ${testBlendFile} --background --python ${runActionScript} -- ${outFilePath}`,
     function (err, stdout, stderr) {
       if (err) { throw err }
 
@@ -94,7 +94,7 @@ test('Automatically selects an armature if no armature is active object', functi
   // Spawn an instance of Blender, write the test output file, and ensure that it matches our
   // expected output
   cp.exec(
-    `blender ${testBlendFile} --background --python ${pythonActionToJSONScript} -- ${outFilePath}`,
+    `blender ${testBlendFile} --background --python ${runActionScript} -- ${outFilePath}`,
     function (err, stdout, stderr) {
       if (err) { throw err }
 
@@ -106,6 +106,49 @@ test('Automatically selects an armature if no armature is active object', functi
         fs.unlink(path.resolve(__dirname, outFilePath), function (err) {
           if (err) { throw err }
           t.equal(actionFile['ArmatureAction']['0.041667'].length, 1, 'Automatically selected an armature if none was selected')
+        })
+      })
+    }
+  )
+})
+
+// Uses filepath provided in the addon's arguments by default
+test('Uses filepath addon argument', function (t) {
+  t.plan(1)
+
+  var testBlendFile = path.resolve(__dirname, './cube-with-one-joint.blend')
+  var outFilePath = path.resolve(__dirname, './filepath-cube-with-one-joint_TMP_TEST_OUTPUT.json')
+  var runWithProvidedFile = path.resolve(__dirname, './run-with-filename-argument.py')
+
+  var expectedJSON = {
+    // Action anme
+    'Action': {
+      // Time
+      '0.041667': [
+        // All joint matrices
+        [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+      ],
+      '0.833333': [
+        [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+      ]
+    }
+  }
+
+  // Spawn an instance of Blender, write the test output file, and ensure that it matches our
+  // expected output
+  cp.exec(
+    `blender ${testBlendFile} --background --python ${runWithProvidedFile} -- /var/tmp/dont-use-this.json ${outFilePath}`,
+    function (err, stdout, stderr) {
+      if (err) { throw err }
+
+      fs.readFile(path.resolve(__dirname, outFilePath), function (err, actionFile) {
+        if (err) { throw err }
+        actionFile = JSON.parse(actionFile)
+
+        // Delete our temporary JSON file that holds our test output armature action data
+        fs.unlink(path.resolve(__dirname, outFilePath), function (err) {
+          if (err) { throw err }
+          t.deepEqual(actionFile, expectedJSON, 'JSON was properly written to file')
         })
       })
     }

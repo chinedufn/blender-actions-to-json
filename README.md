@@ -27,12 +27,20 @@ This is part of an effort to automate more of my asset pipeline.
 
 ```sh
 npm install -g blender-actions-to-json
+# Save to Blender User Preferences
+actions-to-json --install
 ```
 
 ## Usage
 
 ```
+# Run via CLI
 blender /path/to/my-model.blend --background --python `actions2json` -- /path/to/output.json
+```
+
+```
+# Run via bpy.ops
+bpy.ops.import_export.actions2json(filepath='/path/to/output.json')
 ```
 
 The outputted file will look something like this:
@@ -68,6 +76,33 @@ For example, COLLADA export files will have your joints in the same order that t
 can just match them up.
 
 If any of this is confusing please open an issue!
+
+## CLI Usage
+
+```sh
+actions2json --help
+
+Usage
+
+  $ actions2json
+    # Returns the filename of the Blender addon. Useful for running the addon via CLI
+    # i.e.
+    #   blender my-model.blend --python \`actions2json\` -- /var/tmp/output-file.json
+
+  $ actions2json --help
+    # Prints some help text on how to use this command
+
+  $ actions2json --install
+    # Installs and enables the addon and then saves it to your Blender user preferences
+    # Note that you must have Blender in your $PATH in order for this command to work
+
+Options
+
+  -h, --help            -> Get help text about using the blender-actions-to-json CLI
+
+  -i, --install         -> Install the addon and save it in your Blender
+
+```
 
 ## Note
 
