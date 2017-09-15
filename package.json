@@ -34,9 +34,10 @@
     "url": "https://github.com/chinedufn/blender-actions-to-json/issues"
   },
   "homepage": "https://github.com/chinedufn/blender-actions-to-json#readme",
-  "dependencies": {},
+  "dependencies": {
+    "minimist": "^1.2.0"
+  },
   "devDependencies": {
-    "minimist": "^1.2.0",
     "standard": "^10.0.3",
     "tape": "^4.7.0"
   }
