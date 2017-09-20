@@ -1,6 +1,6 @@
 {
   "name": "blender-actions-to-json",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Write the joint data for all `.blend` file actions to a JSON file",
   "main": "index.js",
   "bin": {
