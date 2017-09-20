@@ -162,9 +162,9 @@ test('Writing the actions of a cube with one bone to a JSON file', function (t) 
   var testBlendFile = path.resolve(__dirname, './cube-with-one-joint.blend')
   var outFilePath = path.resolve(__dirname, './cube-with-one-joint-bind-matrices_TMP_TEST_OUTPUT.json')
 
-  var expectedBindPoses = [
-    [ 1, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 1 ]
-  ]
+  var expectedBindPoses = {
+    Bone: [ 1, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 1 ]
+  }
 
   // Spawn an instance of Blender, write the test output file, and ensure that it matches our
   // expected output

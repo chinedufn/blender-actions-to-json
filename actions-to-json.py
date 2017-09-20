@@ -121,18 +121,18 @@ class ExportActionsToJSON(bpy.types.Operator):
 
         # Get rid of the last trailing comma for the action names
         jsonActionData = jsonActionData.rstrip('\r\n').rstrip(',')
-        jsonActionData += '  },\n"bindPoses": [\n'
+        jsonActionData += '  },\n"bindPoses": {\n'
 
         # Now that we've added our actions we add our bind poses
         bpy.ops.object.mode_set(mode = 'EDIT')
         for editBone in activeArmature.data.edit_bones:
-            jsonActionData += stringifyMatrix(editBone.matrix) + ',\n'
+            jsonActionData += '"'+ editBone.name + '": ' + stringifyMatrix(editBone.matrix) + ',\n'
 
         bpy.ops.object.mode_set(mode = 'POSE')
 
         # Get rid of the last trailing comma for the bind poses names
         jsonActionData = jsonActionData.rstrip('\r\n').rstrip(',')
-        jsonActionData += ']'
+        jsonActionData += '}'
 
         jsonActionData += '\n}'
         # print(jsonActionData)
