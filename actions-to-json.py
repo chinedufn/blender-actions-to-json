@@ -22,7 +22,6 @@ class ExportActionsToJSON(bpy.types.Operator):
     filepath = bpy.props.StringProperty(name='filepath')
 
     def execute(self, context):
-        print('hi')
         # Get all of the keyframes for the current action
         def getActionKeyframes(action):
             keyframes = []
