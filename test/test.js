@@ -156,14 +156,17 @@ test('Uses filepath addon argument', function (t) {
 })
 
 // Test that we properly export our bind pose matrices
-test('Writing the actions of a cube with one bone to a JSON file', function (t) {
-  t.plan(1)
+test('Writing the actions and position indices of a cube with one bone to a JSON file', function (t) {
+  t.plan(2)
 
   var testBlendFile = path.resolve(__dirname, './cube-with-one-joint.blend')
   var outFilePath = path.resolve(__dirname, './cube-with-one-joint-bind-matrices_TMP_TEST_OUTPUT.json')
 
-  var expectedBindPoses = {
-    Bone: [ 1, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 1 ]
+  var expectedBindPoses = [
+    [ 1, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 1 ]
+  ]
+  var expectedNameIndices = {
+    Bone: 0
   }
 
   // Spawn an instance of Blender, write the test output file, and ensure that it matches our
@@ -181,6 +184,7 @@ test('Writing the actions of a cube with one bone to a JSON file', function (t) 
         fs.unlink(path.resolve(__dirname, outFilePath), function (err) {
           if (err) { throw err }
           t.deepEqual(actionFile.bindPoses, expectedBindPoses, 'Bind poses were written to the output file')
+          t.deepEqual(actionFile.jointNameIndices, expectedNameIndices, 'Joint indices were written to the output file')
         })
       })
     }

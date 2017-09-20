@@ -121,19 +121,28 @@ class ExportActionsToJSON(bpy.types.Operator):
 
         # Get rid of the last trailing comma for the action names
         jsonActionData = jsonActionData.rstrip('\r\n').rstrip(',')
-        jsonActionData += '  },\n"bindPoses": {\n'
+        jsonActionData += '  },\n"bindPoses": [\n'
 
         # Now that we've added our actions we add our bind poses
         bpy.ops.object.mode_set(mode = 'EDIT')
         for editBone in activeArmature.data.edit_bones:
-            jsonActionData += '"'+ editBone.name + '": ' + stringifyMatrix(editBone.matrix) + ',\n'
+            jsonActionData += stringifyMatrix(editBone.matrix) + ',\n'
 
         bpy.ops.object.mode_set(mode = 'POSE')
 
         # Get rid of the last trailing comma for the bind poses names
         jsonActionData = jsonActionData.rstrip('\r\n').rstrip(',')
-        jsonActionData += '}'
+        jsonActionData += '],\n'
 
+        # Now we create the JSON for the joint name indices. The bind poses and keyframe poses are
+        # arrays of index 0...numBones - 1. To look up a bone in this array you use its joint name index
+        jsonActionData += '"jointNameIndices": {\n'
+        for index, poseBone in enumerate(bpy.context.selected_pose_bones):
+            jsonActionData += '"' + poseBone.name + '": ' + str(index) + ','
+
+        # Get rid of the last trailing comma for the joint indices
+        jsonActionData = jsonActionData.rstrip('\r\n').rstrip(',')
+        jsonActionData += '}'
         jsonActionData += '\n}'
         # print(jsonActionData)
         # Write out data to a file
