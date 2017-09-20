@@ -92,7 +92,7 @@ class ExportActionsToJSON(bpy.types.Operator):
         #   someAction: { timeInSeconds: [bone1, bone2, bone3 ...], keyframe2: [bone1, bone2, bone3 ...] },
         #   anotherAction: { someTime: [bone1, bone2, bone3 ...], keyframe2: [bone1, bone2, bone3 ...], anotherTime: { ... } },
         # }
-        jsonActionData = '{\n'
+        jsonActionData = '{\n  "actions": {\n'
         for actionInfo in actionsList:
             # Change to the action that we are currently parsing the data of
             activeArmature.animation_data.action = bpy.data.actions.get(actionInfo.name)
@@ -121,6 +121,19 @@ class ExportActionsToJSON(bpy.types.Operator):
 
         # Get rid of the last trailing comma for the action names
         jsonActionData = jsonActionData.rstrip('\r\n').rstrip(',')
+        jsonActionData += '  },\n"bindPoses": [\n'
+
+        # Now that we've added our actions we add our bind poses
+        bpy.ops.object.mode_set(mode = 'EDIT')
+        for editBone in activeArmature.data.edit_bones:
+            jsonActionData += stringifyMatrix(editBone.matrix) + ',\n'
+
+        bpy.ops.object.mode_set(mode = 'POSE')
+
+        # Get rid of the last trailing comma for the bind poses names
+        jsonActionData = jsonActionData.rstrip('\r\n').rstrip(',')
+        jsonActionData += ']'
+
         jsonActionData += '\n}'
         # print(jsonActionData)
         # Write out data to a file

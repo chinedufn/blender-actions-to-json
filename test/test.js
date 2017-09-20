@@ -44,7 +44,7 @@ test('Writing the actions of a cube with one bone to a JSON file', function (t) 
         // Delete our temporary JSON file that holds our test output armature action data
         fs.unlink(path.resolve(__dirname, outFilePath), function (err) {
           if (err) { throw err }
-          t.deepEqual(actionFile, expectedJSON, 'JSON was properly written to file')
+          t.deepEqual(actionFile.actions, expectedJSON, 'JSON was properly written to file')
         })
       })
     }
@@ -73,7 +73,7 @@ test('Uses all of the pose bones, not just the ones that were selected', functio
         // Delete our temporary JSON file that holds our test output armature action data
         fs.unlink(path.resolve(__dirname, outFilePath), function (err) {
           if (err) { throw err }
-          t.equal(actionFile['Action']['0.041667'].length, 2, 'All joints were exported')
+          t.equal(actionFile.actions['Action']['0.041667'].length, 2, 'All joints were exported')
         })
       })
     }
@@ -105,7 +105,7 @@ test('Automatically selects an armature if no armature is active object', functi
         // Delete our temporary JSON file that holds our test output armature action data
         fs.unlink(path.resolve(__dirname, outFilePath), function (err) {
           if (err) { throw err }
-          t.equal(actionFile['ArmatureAction']['0.041667'].length, 1, 'Automatically selected an armature if none was selected')
+          t.equal(actionFile.actions['ArmatureAction']['0.041667'].length, 1, 'Automatically selected an armature if none was selected')
         })
       })
     }
@@ -148,7 +148,39 @@ test('Uses filepath addon argument', function (t) {
         // Delete our temporary JSON file that holds our test output armature action data
         fs.unlink(path.resolve(__dirname, outFilePath), function (err) {
           if (err) { throw err }
-          t.deepEqual(actionFile, expectedJSON, 'JSON was properly written to file')
+          t.deepEqual(actionFile.actions, expectedJSON, 'JSON was properly written to file')
+        })
+      })
+    }
+  )
+})
+
+// Test that we properly export our bind pose matrices
+test('Writing the actions of a cube with one bone to a JSON file', function (t) {
+  t.plan(1)
+
+  var testBlendFile = path.resolve(__dirname, './cube-with-one-joint.blend')
+  var outFilePath = path.resolve(__dirname, './cube-with-one-joint-bind-matrices_TMP_TEST_OUTPUT.json')
+
+  var expectedBindPoses = [
+    [ 1, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 1 ]
+  ]
+
+  // Spawn an instance of Blender, write the test output file, and ensure that it matches our
+  // expected output
+  cp.exec(
+    `blender ${testBlendFile} --background --python ${runActionScript} -- ${outFilePath}`,
+    function (err, stdout, stderr) {
+      if (err) { throw err }
+
+      fs.readFile(path.resolve(__dirname, outFilePath), function (err, actionFile) {
+        if (err) { throw err }
+        actionFile = JSON.parse(actionFile)
+
+        // Delete our temporary JSON file that holds our test output armature action data
+        fs.unlink(path.resolve(__dirname, outFilePath), function (err) {
+          if (err) { throw err }
+          t.deepEqual(actionFile.bindPoses, expectedBindPoses, 'Bind poses were written to the output file')
         })
       })
     }
