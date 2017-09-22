@@ -65,10 +65,10 @@ The outputted file will look something like this:
       ]
     }
   },
-  "inverseBindPoses": {
+  "inverseBindPoses": [
     [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0],
     [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0]
-  },
+  ],
   "jointNameIndices": {
     "Torso": 0,
     "Chest": 1
