@@ -38,16 +38,17 @@ class ExportActionsToJSON(bpy.types.Operator):
         # Get all of the bone pose matrices for the current keyframe
         # So if there are 10 bones, we'll get 10 matrices representing
         # these bones' orientations at this point in time
-        def getBonesAtKeyframe(frame):
+        def getBonePosesAtKeyframe(frame, armature, boneNames):
             stringifiedBones = ''
             bpy.context.scene.frame_set(frame)
-            for poseBone in bpy.context.selected_pose_bones:
+            for boneName in boneNames:
+                poseBone = armature.pose.bones[boneName]
                 stringifiedMatrix = stringifyMatrix(poseBone.matrix)
                 # Trailing comma until you get to the last bone
                 stringifiedBones += '      ' + stringifiedMatrix
                 # Add a comma to the end of every bone
                 # in the array excluding the last one
-                if poseBone != bpy.context.selected_pose_bones[-1]:
+                if boneName != boneNames[-1]:
                     stringifiedBones += ','
                 stringifiedBones += '\n'
             return stringifiedBones
@@ -85,9 +86,15 @@ class ExportActionsToJSON(bpy.types.Operator):
         # actions that apply to the current armature
         actionsList = list(bpy.data.actions)
         bpy.ops.object.mode_set(mode = 'POSE')
+
         # Select all of the armature's bones so that we can iterate over them later
+        # We get all bone names so that we are certain to always iterate over bones in a consistent
+        # order. We've had issues in the past where the order would be different depending on how you
+        # accessed the bones, so this should help prevent future errors.
+        allBoneNames = []
         for poseBone in activeArmature.pose.bones:
             poseBone.bone.select = True
+            allBoneNames.append(poseBone.name)
         # Start building our JSON
         # The format is
         # {
@@ -111,11 +118,11 @@ class ExportActionsToJSON(bpy.types.Operator):
             for frame in actionKeyframes:
                 # Round the keyframes time in seconds to 6 decimal places.
                 # i.e. 10.333333 seconds
-                timeOfKeyframe = round(frame /  bpy.context.scene.render.fps, 6)
+                timeOfKeyframe = round(frame / bpy.context.scene.render.fps, 6)
                 # So here, at 24FPS, frame 12 would become `0.5` (seconds)
                 jsonActionData += '    "' + str(timeOfKeyframe) + '": [\n'
                 # Get all of the bone pose matrices for this frame -> [bone1Matrix, bone2Matrix, ..]
-                jsonActionData += getBonesAtKeyframe(frame)
+                jsonActionData += getBonePosesAtKeyframe(frame, activeArmature, allBoneNames)
                 jsonActionData += '    ],\n'
             # Get rid of the last trailing comma for the keyframe times
             jsonActionData = jsonActionData.rstrip('\r\n').rstrip(',') + '\n'
@@ -128,8 +135,7 @@ class ExportActionsToJSON(bpy.types.Operator):
         # Now that we've added our actions we add our bind poses
         # We iterate over pose bones instead of edit bones to ensure a consistent ordering
         # of bone data
-        for poseBone in bpy.context.selected_pose_bones:
-            boneName = poseBone.name
+        for boneName in allBoneNames:
             bpy.ops.object.mode_set(mode = 'EDIT')
 
             stringifiedBindPose = stringifyMatrix(activeArmature.data.edit_bones[boneName].matrix)
@@ -146,8 +152,8 @@ class ExportActionsToJSON(bpy.types.Operator):
         # Now we create the JSON for the joint name indices. The bind poses and keyframe poses are
         # arrays of index 0...numBones - 1. To look up a bone in this array you use its joint name index
         jsonActionData += '"jointNameIndices": {\n'
-        for index, poseBone in enumerate(bpy.context.selected_pose_bones):
-            jsonActionData += '"' + poseBone.name + '": ' + str(index) + ','
+        for index, boneName in enumerate(allBoneNames):
+            jsonActionData += '"' + boneName + '": ' + str(index) + ','
 
         # Get rid of the last trailing comma for the joint indices
         jsonActionData = jsonActionData.rstrip('\r\n').rstrip(',')
