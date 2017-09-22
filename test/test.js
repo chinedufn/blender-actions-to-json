@@ -196,6 +196,6 @@ test('Writing the actions and position indices of a cube with one bone to a JSON
  */
 function roundArray (array) {
   return array.map(function (val) {
-    return val.toFixed(6)
+    return parseFloat(val.toFixed(6))
   })
 }
