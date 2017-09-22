@@ -183,10 +183,19 @@ test('Writing the actions and position indices of a cube with one bone to a JSON
         // Delete our temporary JSON file that holds our test output armature action data
         fs.unlink(path.resolve(__dirname, outFilePath), function (err) {
           if (err) { throw err }
-          t.deepEqual(actionFile.bindPoses, expectedBindPoses, 'Bind poses were written to the output file')
+          t.deepEqual(actionFile.bindPoses.map(roundArray), expectedBindPoses, 'Bind poses were written to the output file')
           t.deepEqual(actionFile.jointNameIndices, expectedNameIndices, 'Joint indices were written to the output file')
         })
       })
     }
   )
 })
+
+/**
+ * Round the values in an array to 6 decimal places
+ */
+function roundArray (array) {
+  return array.map(function (val) {
+    return val.toFixed(6)
+  })
+}
