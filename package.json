@@ -38,6 +38,7 @@
     "minimist": "^1.2.0"
   },
   "devDependencies": {
+    "gl-mat4": "^1.1.4",
     "standard": "^10.0.3",
     "tape": "^4.7.0"
   }

@@ -5,6 +5,8 @@ var path = require('path')
 var test = require('tape')
 var runActionScript = path.resolve(__dirname, '../run-addon.py')
 
+var glMat4 = require('gl-mat4')
+
 // Our test file already have the armature selected as the active object
 // The script currently requires that the active object be the armature that
 // you want to export
@@ -155,7 +157,11 @@ test('Uses filepath addon argument', function (t) {
   )
 })
 
-// Test that we properly export our bind pose matrices
+// Test that we properly export our inverse bind pose matrices
+//
+// NOTE: We originally exported bind poses, so we simply inverted the matrices in our tests
+// when we switched to exporting inverse bind matrices. We switched because inverse bind matrices
+// are more commonly used
 test('Writing the actions and position indices of a cube with one bone to a JSON file', function (t) {
   t.plan(2)
 
@@ -163,7 +169,7 @@ test('Writing the actions and position indices of a cube with one bone to a JSON
   var outFilePath = path.resolve(__dirname, './cube-with-one-joint-bind-matrices_TMP_TEST_OUTPUT.json')
 
   var expectedBindPoses = [
-    [ 1, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 1 ]
+    glMat4.invert([], [ 1, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 1 ])
   ]
   var expectedNameIndices = {
     Bone: 0
@@ -183,7 +189,7 @@ test('Writing the actions and position indices of a cube with one bone to a JSON
         // Delete our temporary JSON file that holds our test output armature action data
         fs.unlink(path.resolve(__dirname, outFilePath), function (err) {
           if (err) { throw err }
-          t.deepEqual(actionFile.bindPoses.map(roundArray), expectedBindPoses, 'Bind poses were written to the output file')
+          t.deepEqual(actionFile.inverseBindPoses.map(roundArray), expectedBindPoses, 'Bind poses were written to the output file')
           t.deepEqual(actionFile.jointNameIndices, expectedNameIndices, 'Joint indices were written to the output file')
         })
       })

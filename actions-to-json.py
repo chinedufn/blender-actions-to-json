@@ -130,20 +130,28 @@ class ExportActionsToJSON(bpy.types.Operator):
 
         # Get rid of the last trailing comma for the action names
         jsonActionData = jsonActionData.rstrip('\r\n').rstrip(',')
-        jsonActionData += '  },\n"bindPoses": [\n'
+        jsonActionData += '  },\n"inverseBindPoses": [\n'
 
         # Now that we've added our actions we add our bind poses
         # We iterate over pose bones instead of edit bones to ensure a consistent ordering
         # of bone data
         for boneName in allBoneNames:
-            bpy.ops.object.mode_set(mode = 'EDIT')
+            # Calculate the bone's inverse bind matrix
+            #
+            # taken from:
+            #   https://blenderartists.org/forum/showthread.php?323968-Exporting-armature-amp-actions-how-do-you-get-the-bind-pose-and-relative-transform
+            #   https://blender.stackexchange.com/a/15229/40607
+            #
+            # TODO: Not currently handling the case where a bone has a parent since I'm using blender-iks-to-fks
+            # which clears all parent relationships before visual keying
+            poseBone = activeArmature.pose.bones[boneName]
 
-            stringifiedBindPose = stringifyMatrix(activeArmature.data.bones[boneName].matrix_local)
+            # We make sure to account for the world offset of the armature since matrix_local is in armature space
+            boneBindMatrix = activeArmature.matrix_world * poseBone.bone.matrix_local
+            boneInverseBind = boneBindMatrix.copy().inverted()
+
+            stringifiedBindPose = stringifyMatrix(boneInverseBind)
             jsonActionData += stringifiedBindPose + ',\n'
-
-            bpy.ops.object.mode_set(mode = 'POSE')
-
-        bpy.ops.object.mode_set(mode = 'POSE')
 
         # Get rid of the last trailing comma for the bind poses names
         jsonActionData = jsonActionData.rstrip('\r\n').rstrip(',')
