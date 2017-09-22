@@ -150,7 +150,7 @@ npm run test
 
 ## TODO:
 
-- Maybe support a `-p, --precision` flag to specify the number of decimal places that pose matrices are rounded to. Right now it's set to 6
+- Maybe support a `-p, --precision` flag to specify the number of decimal places that pose matrices are rounded to
 
 ## See Also
 

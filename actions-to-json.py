@@ -61,9 +61,11 @@ class ExportActionsToJSON(bpy.types.Operator):
             for column in range(0, 4):
                 for row in range(0, 4):
                     if (column == 3 and row == 3):
-                        stringifiedMatrix += str(round(matrix[column][row], 6))
+                        # TODO: Accept a precision flag to grant control over the rounding of matrix values?
+                        stringifiedMatrix += str(matrix[column][row])
                     else:
-                        stringifiedMatrix += str(round(matrix[column][row], 6)) + ', '
+                        # TODO: Accept a precision flag to grant control over the rounding of matrix values?
+                        stringifiedMatrix += str(matrix[column][row]) + ', '
             stringifiedMatrix += ']'
             return stringifiedMatrix
 
@@ -124,9 +126,16 @@ class ExportActionsToJSON(bpy.types.Operator):
         jsonActionData += '  },\n"bindPoses": [\n'
 
         # Now that we've added our actions we add our bind poses
-        bpy.ops.object.mode_set(mode = 'EDIT')
-        for editBone in activeArmature.data.edit_bones:
-            jsonActionData += stringifyMatrix(editBone.matrix) + ',\n'
+        # We iterate over pose bones instead of edit bones to ensure a consistent ordering
+        # of bone data
+        for poseBone in bpy.context.selected_pose_bones:
+            boneName = poseBone.name
+            bpy.ops.object.mode_set(mode = 'EDIT')
+
+            stringifiedBindPose = stringifyMatrix(activeArmature.data.edit_bones[boneName].matrix)
+            jsonActionData += stringifiedBindPose + ',\n'
+
+            bpy.ops.object.mode_set(mode = 'POSE')
 
         bpy.ops.object.mode_set(mode = 'POSE')
 
