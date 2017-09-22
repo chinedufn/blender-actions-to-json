@@ -138,7 +138,7 @@ class ExportActionsToJSON(bpy.types.Operator):
         for boneName in allBoneNames:
             bpy.ops.object.mode_set(mode = 'EDIT')
 
-            stringifiedBindPose = stringifyMatrix(activeArmature.data.edit_bones[boneName].matrix)
+            stringifiedBindPose = stringifyMatrix(activeArmature.data.bones[boneName].matrix_local)
             jsonActionData += stringifiedBindPose + ',\n'
 
             bpy.ops.object.mode_set(mode = 'POSE')
