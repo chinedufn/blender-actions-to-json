@@ -85,6 +85,9 @@ you use probably uses this same order.
 For example, COLLADA export files will have your joints in the same order that these actions are, so you
 can just match them up.
 
+~InverseBindPoses~
+The inverse bind matrix is the matrix that when multiplied by your joint’s default position moves your joint to the origin, in model space.
+
 If any of this is confusing please open an issue!
 
 ## CLI Usage
