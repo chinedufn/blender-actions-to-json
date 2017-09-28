@@ -85,6 +85,9 @@ you use probably uses this same order.
 For example, COLLADA export files will have your joints in the same order that these actions are, so you
 can just match them up.
 
+~InverseBindPoses~
+The inverse bind matrix is the matrix that when multiplied by your joint’s default position moves your joint to the origin, in model space. The inverse bind matrix ensures that when you parent your mesh to your rig your vertices won't move (because all of your bones get turned into identity matrices before transforming your vertices) until you move your rig out of this bind position.
+
 If any of this is confusing please open an issue!
 
 ## CLI Usage
