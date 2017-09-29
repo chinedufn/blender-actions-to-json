@@ -79,11 +79,7 @@ The outputted file will look something like this:
 The file has all of your actions. Each action has all of the keyframe times for that action.
 Each keyframe time has the pose matrices for each joint in your armature.
 
-The ordering of the joints is the same as `bpy.context.selected_pose_bones`. Whatever model exporter
-you use probably uses this same order.
-
-For example, COLLADA export files will have your joints in the same order that these actions are, so you
-can just match them up.
+The ordering of the joints is the same as `bpy.context.selected_pose_bones`.
 
 ~InverseBindPoses~
 The inverse bind matrix is the matrix that when multiplied by your joint’s default position moves your joint to the origin, in model space. The inverse bind matrix ensures that when you parent your mesh to your rig your vertices won't move (because all of your bones get turned into identity matrices before transforming your vertices) until you move your rig out of this bind position.
