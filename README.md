@@ -27,7 +27,8 @@ This is part of an effort to automate more of my asset pipeline.
 
 ```sh
 npm install -g blender-actions-to-json
-# Save to Blender User Preferences
+# This will save the actions2json command to your Blender User Preferences
+# so that you can call it from within Blender.
 actions2json --install
 ```
 
