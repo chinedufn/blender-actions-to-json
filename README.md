@@ -28,7 +28,7 @@ This is part of an effort to automate more of my asset pipeline.
 ```sh
 npm install -g blender-actions-to-json
 # Save to Blender User Preferences
-actions-to-json --install
+actions2json --install
 ```
 
 ## Usage
