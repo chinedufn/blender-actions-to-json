@@ -39,6 +39,9 @@ test('Writing the actions of a cube with one bone to a JSON file', function (t) 
     function (err, stdout, stderr) {
       if (err) { throw err }
 
+      console.log(stdout)
+      console.error(stderr)
+
       fs.readFile(path.resolve(__dirname, outFilePath), function (err, actionFile) {
         if (err) { throw err }
         actionFile = JSON.parse(actionFile)
@@ -67,6 +70,9 @@ test('Uses all of the pose bones, not just the ones that were selected', functio
     `blender ${testBlendFile} --background --python ${runActionScript} -- ${outFilePath}`,
     function (err, stdout, stderr) {
       if (err) { throw err }
+
+      console.log(stdout)
+      console.error(stderr)
 
       fs.readFile(path.resolve(__dirname, outFilePath), function (err, actionFile) {
         if (err) { throw err }
@@ -99,6 +105,9 @@ test('Automatically selects an armature if no armature is active object', functi
     `blender ${testBlendFile} --background --python ${runActionScript} -- ${outFilePath}`,
     function (err, stdout, stderr) {
       if (err) { throw err }
+
+      console.log(stdout)
+      console.error(stderr)
 
       fs.readFile(path.resolve(__dirname, outFilePath), function (err, actionFile) {
         if (err) { throw err }
@@ -143,6 +152,9 @@ test('Uses filepath addon argument', function (t) {
     function (err, stdout, stderr) {
       if (err) { throw err }
 
+      console.log(stdout)
+      console.error(stderr)
+
       fs.readFile(path.resolve(__dirname, outFilePath), function (err, actionFile) {
         if (err) { throw err }
         actionFile = JSON.parse(actionFile)
@@ -181,6 +193,9 @@ test('Writing the actions and position indices of a cube with one bone to a JSON
     `blender ${testBlendFile} --background --python ${runActionScript} -- ${outFilePath}`,
     function (err, stdout, stderr) {
       if (err) { throw err }
+
+      console.log(stdout)
+      console.error(stderr)
 
       fs.readFile(path.resolve(__dirname, outFilePath), function (err, actionFile) {
         if (err) { throw err }

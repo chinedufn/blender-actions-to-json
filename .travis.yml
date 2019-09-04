@@ -3,4 +3,5 @@ node_js:
   - '6'
 os: linux
 before_script:
+  # TODO: This installs Blender 2.79 - we need Blender 2.8 for our tests to pass
   - sudo apt-get install blender
