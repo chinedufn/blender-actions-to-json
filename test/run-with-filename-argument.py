@@ -5,8 +5,8 @@ import sys
 dir = os.path.dirname(__file__)
 addonFilePath = dir + '/../actions-to-json.py'
 
-bpy.ops.wm.addon_install(filepath=addonFilePath)
-bpy.ops.wm.addon_enable(module='actions-to-json')
+bpy.ops.preferences.addon_install(filepath=addonFilePath)
+bpy.ops.preferences.addon_enable(module='actions-to-json')
 
 argv = sys.argv
 # Get all args after `--`

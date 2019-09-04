@@ -25,6 +25,8 @@ This is part of an effort to automate more of my asset pipeline.
 
 ## To Install
 
+We currently support Blender version 2.80 and up
+
 ```sh
 npm install -g blender-actions-to-json
 # This will save the actions2json command to your Blender User Preferences
